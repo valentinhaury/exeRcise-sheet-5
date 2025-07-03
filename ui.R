@@ -21,7 +21,7 @@ app_theme <- bs_theme(
 ui <- fluidPage( 
   theme = app_theme,
   titlePanel("Age distribution of German population"), # displays the title 
-  tagList("Author: ", "Valentin Haury"),
+  tagList("Author: ", "Valentin Haury", tags$br()),
   uiOutput("source"), # displays the output$source from the server
   
   selectInput(
@@ -41,8 +41,8 @@ ui <- fluidPage(
       "Binned Histogram",
       sliderTextInput(
         "binSize", "Choose the size of age-groups:", choices = c(1:10, 20, 25, 33, 50, 100), selected = 1
-      ), # sliderInput so users can input a year (starting value is in the middle)
-      withSpinner(plotOutput("binnedHistogramPlot")), # displays the plot from output$binnedHistogramPlot created in the server (also displays waiting animation until its finnished because at my laptop it took a few seconsd every time)
+      ), # sliderInput so users can input a year. Only years that create somehow good partitions of 100 are possible to select
+      withSpinner(plotOutput("binnedHistogramPlot"), color = "#BB3E00"), # displays the plot from output$binnedHistogramPlot created in the server (also displays waiting animation until its finnished because at my laptop it took a few seconsd every time)
     ),
     tabPanel( # this tab holds the information about the app (Manual and Observations)
       "Information",
@@ -59,12 +59,28 @@ ui <- fluidPage(
       p("There is a difference in the male and female population in the older generations because a lot of males that were 20 or older in 1945
         had to fight in at least one world war")
     ),
+    tabPanel( # this tab is for contacting the apps author
+      "Contact",
+      h3("Contact form"),
+      textInput("name", "Your Name:"),
+      textAreaInput("message", "Write us a message:", rows = 3),
+      actionButton("goButton", "send"),
+      hr(),
+      
+      h3("Github"),
+      p("If you are interested in this project have a look at the ",
+        tags$a(href = "https://github.com/valentinhaury/exeRcise-sheet-5", 
+               "GitHub repository", 
+               target = "_blank")
+      )
+    ),
     tabPanel( # this tab holds the information about modifications 
       "Modifications",
       p("Moved the slider and dropdown menu out of the tab to also use them on the binned Histogramm"),
       p("Added a waiting animation while the binned histogram is created"),
       p("Changed the color of the \"histogram\" according to the height of the bars"),
       p("Added an ui-scheme with color and a font"),
+      p(HTML("Added a Contact-Tab where you can <b> -a  100%!!  certainly- </b> contact the author of this page"))
     )
   )
 )
